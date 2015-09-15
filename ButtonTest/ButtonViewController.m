@@ -122,19 +122,28 @@
 - (NSTableRowView *)tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row{
     
     NSTableRowView *rowView = [[NSTableRowView alloc] init];
+    
+    NSView *buttonSuperView = rowView;
+    
+    if (row % 2 == 0) {
+        NSVisualEffectView *vibrancyView = [[NSVisualEffectView alloc] init];
+        
+        vibrancyView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+        
+        [rowView addSubview:vibrancyView];
+        [vibrancyView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(rowView);
+        }];
+    }
+    
     MXButton *testButton = self.examples[row];
-    [rowView addSubview:testButton];
+    [buttonSuperView addSubview:testButton];
     [testButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(rowView);
+        make.center.equalTo(buttonSuperView);
     }];
+
     
     return rowView;
 }
- 
-- (void)tableView:(NSTableView *)tableView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
-{
-    if (row % 2 == 0){
-        rowView.backgroundColor = [NSColor colorWithCalibratedWhite:0.0 alpha:0.15];
-    }
-}
+
 @end
